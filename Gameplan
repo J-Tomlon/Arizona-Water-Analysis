@@ -8,3 +8,5 @@ website https://www.azwater.gov/ama/ama-data
 - Flex Bal Source Data.csv: Water credit allotment for sub-basin and allotment district 
 
 - AMA Demand Supply from DW .csv: Water demand by sector
+
+- USGS full dataset site: https://waterdata.usgs.gov/az/nwis/water_use?format=html_table&rdb_compression=file&wu_area=County&wu_year=ALL
