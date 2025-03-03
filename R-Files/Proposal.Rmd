@@ -1,7 +1,17 @@
 ---
-title: "Proposal"
-output: html_document
----
+title: "Arizona Water Production and Consumption Analysis"
+author: "Jack Tomlon, Delila Medlin"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: true        
+    toc_float: true  
+    code_folding: hide 
+  pdf_document: default 
+  word_document: default 
+fontsize: 12pt         
+linestretch: 1.5       
+geometry: margin=1in   
 
 ### Requirements:
 
@@ -9,9 +19,7 @@ The proposals should be submitted as professional PDF documents (created with RM
 
 ### Title and Abstract. 
 
-# Arizona Water Production and Consumption Analysis
-
-The title should be informative based on the project you intend to do.  The abstract should contain 1) the data you are working with and how it is going to be collected, 2) the goal for how you will use the data if you collect everything you are hoping for, and 3) the goals for the project - what do you expect to accomplish? One paragraph summary (maximum 250 words, although I won't check). 
+The title should be informative based on the project you intend to do.  The abstract should contain 1) the data you are working with and how it is going to be collected, 2) the goal for how you will use the data if you collect everything you are hoping for, and 3) the goals for the project - what do you expect to accomplish? One paragraph summary (maximum 250 words, although I won't check).
 
 We will analyze groundwater production and consumption data from Arizona's government website to identify any anomalies and investigate sectors exhibiting unusual water loss. Additionally, we aim to explore the potential ethical and environmental benefits of incorporating reclaimed water into Arizona's water management strategy. *(add more for (3, goals for project))*
 
