@@ -14,46 +14,26 @@ geometry: margin=1in
 
 ### Requirements:
 
-The proposals should be submitted as professional PDF documents (created with
-RMD or Quarto). Please keep the proposal to approximately 2 pages. If you add a
-table and figure, this may grow a little bit, but this is just a proposal so
-keep it short!The proposals should contain the following sections with written
-paragraphs.
+The proposals should be submitted as professional PDF documents (created with RMD or Quarto). Please keep the proposal to approximately 2 pages. If you add a table and figure, this may grow a little bit, but this is just a proposal so keep it short!The proposals should contain the following sections with written paragraphs.
 
 ### Title and Abstract.
 
 The title should be informative based on the project you intend to do.\
-The abstract should contain 1) the data you are working with and how it is going
-to be collected, 2) the goal for how you will use the data if you collect
-everything you are hoping for, and 3) the goals for the project - what do you
-expect to accomplish? One paragraph summary (maximum 250 words, although I won't
-check).
+The abstract should contain 1) the data you are working with and how it is going to be collected, 2) the goal for how you will use the data if you collect everything you are hoping for, and 3) the goals for the project - what do you expect to accomplish? One paragraph summary (maximum 250 words, although I won't check).
 
-This project analyze water production and consumption data from United States
-Geological Survey website to identify any anomalies and investigate sectors
-exhibiting unusual water loss. Additionally, we aim to explore the potential
-ethical and environmental benefits of incorporating an increase use of reclaimed
-water into Arizona's water management strategy.
+This project analyze water production and consumption data from United States Geological Survey website to identify any anomalies and investigate sectors exhibiting unusual water loss. Additionally, we aim to explore the potential ethical and environmental benefits of incorporating an increase use of reclaimed water into Arizona's water management strategy.
 
 ### Introduction.
 
-What data did you collect, why are you interested in it? If you have the data
-collected to some extent, show some examples of the data.frame in a properly
-formatted table (with legend) and indicate to me you have successfully collected
-data!
+What data did you collect, why are you interested in it? If you have the data collected to some extent, show some examples of the data.frame in a properly formatted table (with legend) and indicate to me you have successfully collected data!
 
-For this project we collected publicly available data from the USGS and the
-Arizona government website. The USGS Arizona water use data set is updated and collected every five years with the last entry being 2015. The data set covers supply and demand for public, domestic, agricultural, commercial and, industrial sectors as well as documenting the the waste water returned out of those sectors. 
+For this project we collected publicly available data from the USGS and the Arizona government website. The USGS Arizona water use data set is updated and collected every five years with the last entry being 2015. The data set covers supply and demand for public, domestic, agricultural, commercial and, industrial sectors as well as documenting the the waste water returned out of those sectors.
 
 (Data table example)
 
 ### Methods.
 
-Discuss what you need to do to scrape/collect the data. You may explore any
-difficulties you think you may encounter here. Then pivot to what you plan to do
-with the data! What types of analysis do you want to try and use? What type of
-advanced statistical modeling may be necessary? If modeling is out of reach,
-when other ways do you plan to analyze the data?
+Discuss what you need to do to scrape/collect the data. You may explore any difficulties you think you may encounter here. Then pivot to what you plan to do with the data! What types of analysis do you want to try and use? What type of advanced statistical modeling may be necessary? If modeling is out of reach, when other ways do you plan to analyze the data?
 
 ### Expected Outcomes.
 
