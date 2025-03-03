@@ -21,7 +21,7 @@ The proposals should be submitted as professional PDF documents (created with RM
 
 The title should be informative based on the project you intend to do.  The abstract should contain 1) the data you are working with and how it is going to be collected, 2) the goal for how you will use the data if you collect everything you are hoping for, and 3) the goals for the project - what do you expect to accomplish? One paragraph summary (maximum 250 words, although I won't check).
 
-We will analyze groundwater production and consumption data from Arizona's government website to identify any anomalies and investigate sectors exhibiting unusual water loss. Additionally, we aim to explore the potential ethical and environmental benefits of incorporating reclaimed water into Arizona's water management strategy. *(add more for (3, goals for project))*
+We will analyze water production and consumption data from United State Geological Survey website to identify any anomalies and investigate sectors exhibiting unusual water loss. Additionally, we aim to explore the potential ethical and environmental benefits of incorporating reclaimed water into Arizona's water management strategy. 
 
 ### Introduction. 
 What data did you collect, why are you interested in it?  If you have the data collected to some extent, show some examples of the data.frame in a properly formatted table (with legend) and indicate to me you have successfully collected data!
