@@ -19,3 +19,6 @@ https://www.azwater.gov/ama/ama-data
 - AMA Demand Supply from DW .csv: Water demand by sector
 
 - USGS full dataset site: https://waterdata.usgs.gov/az/nwis/water_use?format=html_table&rdb_compression=file&wu_area=County&wu_year=ALL
+
+try to filter data
+try and get not millions of gallons to help with re-use column
