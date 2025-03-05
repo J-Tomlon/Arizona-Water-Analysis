@@ -30,12 +30,17 @@ What data did you collect, why are you interested in it? If you have the data co
 For this project we collected publicly available data from the USGS and the Arizona government website. The USGS Arizona water use data set is updated and collected every five years with the last entry being 2015. The data set covers supply and demand for public, domestic, agricultural, commercial and, industrial sectors as well as documenting the the waste water returned out of those sectors. The data is collected every 5 years in a census working with local, State, and Federal agencies. 
 
 (Data table example)
+```{r}
+
+```
 
 ### Methods.
 
 Discuss what you need to do to scrape/collect the data. You may explore any difficulties you think you may encounter here. Then pivot to what you plan to do with the data! What types of analysis do you want to try and use? What type of advanced statistical modeling may be necessary? If modeling is out of reach, when other ways do you plan to analyze the data?
 
 The data was publicly available from the azwater.gov website in a .csv format, so we had little to no cleaning for the "ID Summary Source Data" set. As for the set form the USGS- "USGS Water Use Data for All of Arizona" this set was more difficult to download for exploration. Their website has no easily accessible download or API for this set, 
+=======
+
 
 ### Expected Outcomes.
 

@@ -1,7 +1,6 @@
 library(dplyr)
 
-AMA <- read.csv("AMA Demand Supply from DW.csv")
+setwd("C:/Users/hocke/OneDrive/Desktop/Arizona-Water-Analysis")
 
-FlexBal <- read.csv("Flex Bal Source Data")
+usgs <- read.csv("raw-data/USGS Water Use Data for All of Arizona.csv")
 
-ID <- read.csv("ID Summary Source Data.csv")
