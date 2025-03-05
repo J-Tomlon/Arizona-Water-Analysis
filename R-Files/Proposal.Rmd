@@ -38,7 +38,7 @@ For this project we collected publicly available data from the USGS and the Ariz
 
 Discuss what you need to do to scrape/collect the data. You may explore any difficulties you think you may encounter here. Then pivot to what you plan to do with the data! What types of analysis do you want to try and use? What type of advanced statistical modeling may be necessary? If modeling is out of reach, when other ways do you plan to analyze the data?
 
-The data was publicly available from the azwater.gov website in a .csv format, so we had little to no cleaning for the "ID Summary Source Data" set. As for the set form the USGS- "USGS Water Use Data for All of Arizona" this set was more difficult to download for exploration. Their website has no easily accessible download or API for this set, 
+The data was publicly available from the azwater.gov website in a .csv format, so we had little to no cleaning for the "ID Summary Source Data" set. As for the set form the USGS- "USGS Water Use Data for All of Arizona" this set was more difficult to download for exploration. Their website has no easily accessible download or API for this set, so the data was simply copid and pasted from the provided table format into a csv. 
 =======
 
 
