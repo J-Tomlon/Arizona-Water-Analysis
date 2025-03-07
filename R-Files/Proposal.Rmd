@@ -1,47 +1,83 @@
 ---
-editor_options: 
-  markdown: 
-    wrap: 80
-title: "Arizona Water Production and Consumption Analysis" 
-author: "Jack Tomlon, Delila Medlin" 
-date: "`r Sys.Date()`" 
-output: html_document: toc: true\
-toc_float: true\
-code_folding: hide pdf_document: default word_document: default fontsize: 12pt\
-linestretch: 1.5\
-geometry: margin=1in
+title: "Arizona Water Production and Consumption Analysis"
+author: "Jack Tomlon, Delila Medlin"
+date: "`r Sys.Date()`"
+output:
+  pdf_document: default
+  html_document: default
+  word_document: default
 ---
 
-### Requirements:
+### Abstract
 
-The proposals should be submitted as professional PDF documents (created with RMD or Quarto). Please keep the proposal to approximately 2 pages. If you add a table and figure, this may grow a little bit, but this is just a proposal so keep it short!The proposals should contain the following sections with written paragraphs.
-
-### Title and Abstract.
-
-The title should be informative based on the project you intend to do.\
-The abstract should contain 1) the data you are working with and how it is going to be collected, 2) the goal for how you will use the data if you collect everything you are hoping for, and 3) the goals for the project - what do you expect to accomplish? One paragraph summary (maximum 250 words, although I won't check).
-
-This project analyze water production and consumption data from United States Geological Survey website to identify any anomalies and investigate sectors exhibiting unusual water loss. Additionally, we aim to explore the potential ethical and environmental benefits of incorporating an increase use of reclaimed water into Arizona's water management strategy.
+&nbsp;&nbsp;&nbsp;&nbsp;This project analyzes water production and consumption data from the United States Geological Survey (USGS) to identify anomalies and investigate sectors exhibiting unusual water loss in Arizona. The data, collected from publicly available USGS resources, includes information on water withdrawals, usage by sector, and sources such as surface and groundwater. The goal is to uncover patterns and discrepancies that may indicate inefficiencies or areas for improved water management. Additionally, this analysis explores the potential ethical and environmental benefits of increasing the use of reclaimed water within Arizona's water management strategy. By identifying opportunities to optimize water use and integrate sustainable practices, the project aims to support more informed decision-making for managing Arizona's limited water resources effectively.
 
 ### Introduction.
 
-What data did you collect, why are you interested in it? If you have the data collected to some extent, show some examples of the data.frame in a properly formatted table (with legend) and indicate to me you have successfully collected data!
-
-For this project we collected publicly available data from the USGS and the Arizona government website. The USGS Arizona water use data set is updated and collected every five years with the last entry being 2015. The data set covers supply and demand for public, domestic, agricultural, commercial and, industrial sectors as well as documenting the the waste water returned out of those sectors. The data is collected every 5 years in a census working with local, State, and Federal agencies. 
-
-(Data table example)
-```{r}
-
-```
+&nbsp;&nbsp;&nbsp;&nbsp;For this project, we collected publicly available data from the United States Geological Survey (USGS) and the Arizona government website. The USGS Arizona water use dataset is updated every five years, with the most recent entry from 2015. This dataset includes information on water supply and demand across various sectors, such as public, domestic, agricultural, commercial, industrial, thermoelectric, irrigation, livestock, and wastewater. It also documents wastewater returned by these sectors. The data is gathered through a collaborative census involving local, state, and federal agencies, capturing around 277 variables during each collection cycle. Our interest in this data lies in its potential to reveal patterns, inefficiencies, and opportunities for improved water management in Arizona, a state facing significant water scarcity challenges.
 
 ### Methods.
 
 Discuss what you need to do to scrape/collect the data. You may explore any difficulties you think you may encounter here. Then pivot to what you plan to do with the data! What types of analysis do you want to try and use? What type of advanced statistical modeling may be necessary? If modeling is out of reach, when other ways do you plan to analyze the data?
 
-The data was publicly available from the azwater.gov website in a .csv format, so we had little to no cleaning for the "ID Summary Source Data" set. As for the set form the USGS- "USGS Water Use Data for All of Arizona" this set was more difficult to download for exploration. Their website has no easily accessible download or API for this set, so the data was simply copid and pasted from the provided table format into a csv. 
-=======
+The data was publicly available from the azwater.gov website in a .csv format, so we had little to no cleaning for the "ID Summary Source Data" set. As for the set form the USGS- "USGS Water Use Data for All of Arizona" this set was more difficult to download for exploration. Their website has no easily accessible download or API for this set, so the data was simply copied and pasted from the provided table format into a csv. 
 
+
+&nbsp;&nbsp;&nbsp;&nbsp;Obtaining the "USGS Water Use Data for All of Arizona" had easily accessible downloads. To collect this data, we relied on manual downloads and preprocessing steps, including reformatting and ensuring consistency across variables. The analysis plan involves exploratory data analysis (EDA) to identify patterns and potential anomalies in water use across different sectors. We also intend to use regression analysis for potential predictors of water consumption. If advanced statistical modeling proves impractical, we will focus on comparative analysis between sectors and historical data to highlight significant shifts or inefficiencies in water use.
 
 ### Expected Outcomes.
 
-If everything goes correctly, what do you expect to find from this study?
+&nbsp;&nbsp;&nbsp;&nbsp;If everything goes as planned, we expect to identify patterns and anomalies in water use across various sectors in Arizona, such as unusually high losses or inefficiencies. Additionally, we anticipate uncovering trends that highlight sectors with the greatest potential for water conservation. The analysis may also reveal the benefits of increasing the use of reclaimed water as part of a sustainable water management strategy. Ultimately, these findings could support more informed policy decisions aimed at optimizing water resources and mitigating the impacts of water scarcity in Arizona.
+
+### Group Considerations
+
+&nbsp;&nbsp;&nbsp;&nbsp;It will be expected of both group members to contribute to every aspect of the project. It was noted to start that Jack will take on creating good visuals and Delila will start looking at the data through a statistical lens. 
+
+### Example Data Table: Coconino and Maricopa County entries for 2 recordings
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(dplyr)
+library(knitr)
+
+
+#jacks machine
+# setwd("C:/Users/etoml/OneDrive/Desktop/Arizona-Water-Analysis")
+# USGS <- read.csv("raw-data/USGS Water Use Data for All of Arizona.csv")
+
+# delila's machine 
+setwd("C:/Users/delil/Desktop/Spring 2025/STA 486C/FinalProject/Arizona-Water-Analysis")
+USGS <- read.csv("raw-data/USGS Water Use Data for All of Arizona.csv")
+
+USGS.clean <- USGS[, c("State.Name", 
+                       "County.Name",
+                       "Year", 
+                       "Public.Supply.total.self.supplied.withdrawals..groundwater..in.Mgal.d",
+                       "Domestic.per.capita.use..self.supplied..in.gallons.person.day")]
+USGS.clean <- USGS.clean %>% 
+  rename("public self-supply withdrawals groundwater Mgal/d" = "Public.Supply.total.self.supplied.withdrawals..groundwater..in.Mgal.d") %>%
+  rename("domestic per capita use gal/d" = "Domestic.per.capita.use..self.supplied..in.gallons.person.day")
+
+USDS.clean.years <- USGS.clean %>%
+  filter(Year %in% c("2005", "2010", "2015")) %>% 
+  filter(County.Name %in% c("Coconino County", "Maricopa County"))
+
+
+kable(USDS.clean.years)
+```
+
+&nbsp;&nbsp;&nbsp;&nbsp;This exerpt dataset contains water use information for Coconino and Maricopa Counties, Arizona, from 2005 to 2015, including public self-supply groundwater withdrawals (in million gallons per day, Mgal/d) and domestic per capita water use (in gallons per day, gal/d).
+
+    Coconino County:
+        Self-supply withdrawals showed a fluctuation, increasing from 13.40 Mgal/d
+        in 2005 to 16.22 Mgal/d in 2015, with a slight decrease in 2010 to 12.46 Mgal/d.
+        Domestic per capita use remained stable at 109 gal/d in 2005 and 2010, 
+        then dropped to 87 gal/d in 2015.
+
+    Maricopa County:
+        Self-supply withdrawals remained high, with a decrease from 223.93 Mgal/d
+        in 2005 to 189.35 Mgal/d in 2015, though there was little change between
+        2005 and 2010 (223.92 Mgal/d).Domestic per capita use decreased over time
+        from 152 gal/d in 2005 to 131 gal/d in 2015, with a slight decrease from
+        151 gal/d in 2010.
+
+In summary, both counties show a decrease in domestic per capita water use, but Coconino County saw more variation in withdrawals, while Maricopa County had more consistent withdrawals with a noticeable decline in recent years. 
