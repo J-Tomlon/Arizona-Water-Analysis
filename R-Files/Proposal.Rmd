@@ -12,32 +12,20 @@ linestretch: 1.5\
 geometry: margin=1in
 ---
 
-### Requirements:
 
-The proposals should be submitted as professional PDF documents (created with RMD or Quarto). Please keep the proposal to approximately 2 pages. If you add a table and figure, this may grow a little bit, but this is just a proposal so keep it short!The proposals should contain the following sections with written paragraphs.
+### Abstract
 
-### Title and Abstract.
-
-The title should be informative based on the project you intend to do.\
-The abstract should contain 1) the data you are working with and how it is going to be collected, 2) the goal for how you will use the data if you collect everything you are hoping for, and 3) the goals for the project - what do you expect to accomplish? One paragraph summary (maximum 250 words, although I won't check).
-
-This project analyze water production and consumption data from United States Geological Survey website to identify any anomalies and investigate sectors exhibiting unusual water loss. Additionally, we aim to explore the potential ethical and environmental benefits of incorporating an increase use of reclaimed water into Arizona's water management strategy.
+This project analyzes water production and consumption data from the United States Geological Survey (USGS) to identify anomalies and investigate sectors exhibiting unusual water loss in Arizona. The data, collected from publicly available USGS resources, includes information on water withdrawals, usage by sector, and sources such as surface and groundwater. The goal is to uncover patterns and discrepancies that may indicate inefficiencies or areas for improved water management. Additionally, this analysis explores the potential ethical and environmental benefits of increasing the use of reclaimed water within Arizona's water management strategy. By identifying opportunities to optimize water use and integrate sustainable practices, the project aims to support more informed decision-making for managing Arizona's limited water resources effectively.
 
 ### Introduction.
 
-What data did you collect, why are you interested in it? If you have the data collected to some extent, show some examples of the data.frame in a properly formatted table (with legend) and indicate to me you have successfully collected data!
-
-For this project we collected publicly available data from the USGS and the Arizona government website. The USGS Arizona water use data set is updated and collected every five years with the last entry being 2015. The data set covers supply and demand for public, domestic, agricultural, commercial and, industrial sectors as well as documenting the the waste water returned out of those sectors. The data is collected every 5 years in a census working with local, State, and Federal agencies. Each time of collection there are around 277 variables collected. Of that group there are general sectors of public, domestic, industrial, commercial, thermoelectric, irrigation, livestock, and waste-water
-
+For this project, we collected publicly available data from the United States Geological Survey (USGS) and the Arizona government website. The USGS Arizona water use dataset is updated every five years, with the most recent entry from 2015. This dataset includes information on water supply and demand across various sectors, such as public, domestic, agricultural, commercial, industrial, thermoelectric, irrigation, livestock, and wastewater. It also documents wastewater returned by these sectors. The data is gathered through a collaborative census involving local, state, and federal agencies, capturing around 277 variables during each collection cycle. Our interest in this data lies in its potential to reveal patterns, inefficiencies, and opportunities for improved water management in Arizona, a state facing significant water scarcity challenges.
 
 ### Methods.
 
-Discuss what you need to do to scrape/collect the data. You may explore any difficulties you think you may encounter here. Then pivot to what you plan to do with the data! What types of analysis do you want to try and use? What type of advanced statistical modeling may be necessary? If modeling is out of reach, when other ways do you plan to analyze the data?
-
-The data was publicly available from the azwater.gov website in a .csv format, so we had little to no cleaning for the "ID Summary Source Data" set. As for the set form the USGS- "USGS Water Use Data for All of Arizona" this set was more difficult to download for exploration. Their website has no easily accessible download or API for this set, 
-
+Obtaining the "USGS Water Use Data for All of Arizona" had easily accessible downloads. To collect this data, we relied on manual downloads and preprocessing steps, including reformatting and ensuring consistency across variables. The analysis plan involves exploratory data analysis (EDA) to identify patterns and potential anomalies in water use across different sectors. We also intend to use regression analysis for potential predictors of water consumption. If advanced statistical modeling proves impractical, we will focus on comparative analysis between sectors and historical data to highlight significant shifts or inefficiencies in water use.
 
 
 ### Expected Outcomes.
 
-If everything goes correctly, what do you expect to find from this study?
+If everything goes as planned, we expect to identify patterns and anomalies in water use across various sectors in Arizona, such as unusually high losses or inefficiencies. Additionally, we anticipate uncovering trends that highlight sectors with the greatest potential for water conservation. The analysis may also reveal the benefits of increasing the use of reclaimed water as part of a sustainable water management strategy. Ultimately, these findings could support more informed policy decisions aimed at optimizing water resources and mitigating the impacts of water scarcity in Arizona.
