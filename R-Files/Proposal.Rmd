@@ -10,7 +10,7 @@ output:
 
 ### Abstract
 
-&nbsp;&nbsp;&nbsp;&nbsp;This project analyzes water production and consumption data from the United States Geological Survey (USGS) to identify anomalies and investigate sectors exhibiting unusual water loss in Arizona. The data, collected from publicly available USGS resources, includes information on water withdrawals, usage by sector, and sources such as surface and groundwater. The goal is to uncover patterns and discrepancies that may indicate inefficiencies or areas for improved water management. Additionally, this analysis explores the potential ethical and environmental benefits of increasing the use of reclaimed water within Arizona's water management strategy. By identifying opportunities to optimize water use and integrate sustainable practices, the project aims to support more informed decision-making for managing Arizona's limited water resources effectively.
+&nbsp;&nbsp;&nbsp;&nbsp; As of March 2025, a staggering 99% of Arizona was in a state of drought (US Drought Monitor 2025). Decreases in precipitation in our state have brought about concerns for the future of Arizona's water future, and how the state is going to sustain their growing population and water consumption rates. This project analyzes water production and consumption data from the United States Geological Survey (USGS) to identify anomalies and investigate sectors exhibiting unusual water loss in Arizona. The data, collected from publicly available USGS resources includes information on water withdrawals, usage by sector, and sources such as surface and groundwater. The goal is to uncover patterns and discrepancies that may indicate inefficiencies or areas for improved water management. Additionally, this analysis explores the potential ethical and environmental benefits of increasing the use of reclaimed water within Arizona's water management strategy. By identifying opportunities to optimize water use and integrate sustainable practices, the project aims to support more informed decision-making for managing Arizona's limited water resources effectively.
 
 ### Introduction.
 
@@ -18,12 +18,9 @@ output:
 
 ### Methods.
 
-Discuss what you need to do to scrape/collect the data. You may explore any difficulties you think you may encounter here. Then pivot to what you plan to do with the data! What types of analysis do you want to try and use? What type of advanced statistical modeling may be necessary? If modeling is out of reach, when other ways do you plan to analyze the data?
+&nbsp;&nbsp;&nbsp;&nbsp;The "USGS Water Use Data for All of Arizona" didn't necessarily have easily accessible downloads. To collect this data, we relied on manual downloading and preprocessing steps, including reformatting and ensuring consistency across variables. 
 
-The data was publicly available from the azwater.gov website in a .csv format, so we had little to no cleaning for the "ID Summary Source Data" set. As for the set form the USGS- "USGS Water Use Data for All of Arizona" this set was more difficult to download for exploration. Their website has no easily accessible download or API for this set, so the data was simply copied and pasted from the provided table format into a csv. 
-
-
-&nbsp;&nbsp;&nbsp;&nbsp;Obtaining the "USGS Water Use Data for All of Arizona" had easily accessible downloads. To collect this data, we relied on manual downloads and preprocessing steps, including reformatting and ensuring consistency across variables. The analysis plan involves exploratory data analysis (EDA) to identify patterns and potential anomalies in water use across different sectors. We also intend to use regression analysis for potential predictors of water consumption. If advanced statistical modeling proves impractical, we will focus on comparative analysis between sectors and historical data to highlight significant shifts or inefficiencies in water use.
+&nbsp;&nbsp;&nbsp;&nbsp;The analysis plan involves exploratory data analysis (EDA) to identify patterns and potential anomalies in water use across different sectors. We also intend to use regression analysis for potential predictors of water consumption. If advanced statistical modeling proves impractical, we will focus on comparative analysis between sectors and historical data to highlight significant shifts or inefficiencies in water use.
 
 ### Expected Outcomes.
 
