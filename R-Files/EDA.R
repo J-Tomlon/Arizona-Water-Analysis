@@ -48,7 +48,7 @@ setwd("C:/Users/delil/Desktop/Spring 2025/STA 486C/FinalProject/Arizona-Water-An
 
 # Read the CSV file
 water_data <- read_csv("USGS Water Use Data for All of Arizona.csv")
-water_data <- read_csv("../raw-data/USGS Water Use Data for All of Arizona.csv")
+
 
 # First, convert all columns (except the identifier columns) to character type
 water_data_char <- water_data %>%
