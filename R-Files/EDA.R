@@ -49,6 +49,7 @@ library(readr)
 
 # Read the CSV file
 water_data <- read_csv("USGS Water Use Data for All of Arizona.csv")
+water_data <- read_csv("../raw-data/USGS Water Use Data for All of Arizona.csv")
 
 # First, convert all columns (except the identifier columns) to character type
 water_data_char <- water_data %>%
