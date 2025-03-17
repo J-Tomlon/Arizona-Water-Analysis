@@ -1,9 +1,7 @@
 library(tidyverse)
 library(dplyr)
 
-setwd("C:/Users/delil/Desktop/Spring 2025/STA 486C/FinalProject/Arizona-Water-Analysis")
-
-
+# not using these sets most likely 
 water <- read.csv("AMA Demand Supply from DW .csv")
 
 water2 <- read.csv("raw-data/ID Summary Source Data.csv")
@@ -46,6 +44,7 @@ usgswaterfiltered <- usgswater %>% select(ends_with("water.withdrawals..fresh..i
 # Load necessary libraries
 library(tidyverse)
 library(readr)
+setwd("C:/Users/delil/Desktop/Spring 2025/STA 486C/FinalProject/Arizona-Water-Analysis/raw-data")
 
 # Read the CSV file
 water_data <- read_csv("USGS Water Use Data for All of Arizona.csv")
