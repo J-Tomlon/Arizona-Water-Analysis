@@ -14,8 +14,8 @@ USGS <- USGS %>%
 water_withdrawals <- USGS %>%
   select(
     `County Name`, `Year`, `Population`,
-    contains("total self-supplied withdrawals") & contains("total, in Mgal/d")
-  )
+    contains("withdrawals")) %>%
+  select(!contains("saline"))
 
 #Population Table 
 Population <- water_withdrawals %>%
