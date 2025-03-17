@@ -7,18 +7,10 @@ https://www.azwater.gov/ama/ama-data
 
     water science glossary
     https://www.usgs.gov/special-topics/water-science-school/science/water-science-glossary#overview
-    
-
-
-- ID Summary Source Data.csv: look at what AMA areas have the most lost and Unaccounted for water. Lost the most water. 
-
-- 03_Dashboard_Data.xlsx: Can look at the water use in/out by sector 
-
-- Flex Bal Source Data.csv: Water credit allotment for sub-basin and allotment district 
-
-- AMA Demand Supply from DW .csv: Water demand by sector
 
 - USGS full dataset site: https://waterdata.usgs.gov/az/nwis/water_use?format=html_table&rdb_compression=file&wu_area=County&wu_year=ALL
 
 try to filter data
 try and get not millions of gallons to help with re-use column
+
+make Graphs 
