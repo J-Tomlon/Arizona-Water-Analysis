@@ -10,13 +10,17 @@ USGS <- USGS %>%
                    `Total Population total population of area, in thousands`), as.character)) %>%
   rename(Population = 'Total Population total population of area, in thousands')
   
-
+#Withdrawals
 water_withdrawals <- USGS %>%
   select(
     `County Name`, `Year`, `Population`,
-    contains("withdrawals")) %>%
+    contains("withdrawals") & contains("total")) %>%
   select(!contains("saline"))
 
+#groundwater
+groundwater <- water_withdrawals %>%
+  select(
+    `County Name`, `Year`, `Population`, contains("groundwater"))
 #Population Table 
 Population <- water_withdrawals %>%
   group_by(Year) %>%
