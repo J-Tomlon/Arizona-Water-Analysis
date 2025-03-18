@@ -12,9 +12,9 @@ library(tigris)
 # loading in the USGS data 
 water_data <- read.csv("USGS Water Use Data for All of Arizona.csv")
 
-###################################
+#################################################################
 # initial attempt at reformatting from 300ish columns to a long format 
-
+#################################################################
 
 # First, convert all columns (except the identifier columns) to character type
 water_data_char <- water_data %>%
@@ -94,7 +94,6 @@ time_series_data <- water_data %>%
 ####################################
 # focus on reclaimed water use
 ################################
-
 reclaimed_water <- water_data %>% select(c("County Name", "Year", 
                                            "Mining reclaimed wastewater, in Mgal/d",                                                       
                                            "Wastewater Treatment reclaimed wastewater released by public wastewater facilities, in Mgal/d",
@@ -227,6 +226,7 @@ ggplot(water_combined, aes(x = Water_Per_Capita, y = Reclaimed_Pct, color = `Cou
 #####################################
 # focus on find improvements in efficiency by sector, 
 ## visualizing differences in irrigation methods
+#########################################
 
 water_use_by_sector <- water_data %>%
   select(
@@ -449,10 +449,6 @@ ggplot(efficiency_by_method,
 
 
 
-
-
-
-
 # Look at groundwater vs surface water use (important for sustainability in AZ)
 water_sources <- water_data %>%
   select(
@@ -519,12 +515,8 @@ water_trends <- water_data %>%
   )
 
 ####################################
-# more plots, mostly random
-
-# Read water data and convert columns
-water_data <- read_csv("USGS Water Use Data for All of Arizona.csv") %>%
-  mutate(across(-c(`State Code`, `County Code`, `Year`), as.character),
-         across(-c(`State Name`, `County Name`), as.numeric))
+# Focus on spatial visualization
+################################
 
 # Get Arizona county shapefile
 az_counties <- counties(state = "AZ", cb = TRUE)
