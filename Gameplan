@@ -1,16 +1,20 @@
 ### Gameplan
 websites
-https://www.azwater.gov/ama/ama-data
+    https://www.azwater.gov/ama/ama-data
 
-    glossary of terms:
+    USGS full dataset:
+    https://waterdata.usgs.gov/az/nwis/water_use?format=html_table&rdb_compression=file&wu_area=County&wu_year=ALL
+
+    USGS Glossary of terms:
     https://www.usgs.gov/mission-areas/water-resources/science/water-use-terminology
 
-    water science glossary
+    Water science glossary:
     https://www.usgs.gov/special-topics/water-science-school/science/water-science-glossary#overview
 
-- USGS full dataset site: https://waterdata.usgs.gov/az/nwis/water_use?format=html_table&rdb_compression=file&wu_area=County&wu_year=ALL
+    Info about irrigation systems:
+    https://dtelandscape.com/exploring-different-types-of-irrigation-systems-for-commercial-properties/
 
 try to filter data
-try and get not millions of gallons to help with re-use column
 
 make Graphs 
+
