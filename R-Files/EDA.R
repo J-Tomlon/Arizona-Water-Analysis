@@ -378,6 +378,26 @@ ggplot(irrigation_long %>% filter(`County Name` %in% counties_with_data),
     strip.text = element_text(face = "bold")
   )
 
+#########################################################
+# trying to get a stacked bar plot of irrigation use over time .....
+ggplot(irrigation_long, 
+       aes(x = Year, y = Percentage, fill = Irrigation_Type)) +
+  geom_bar(position = 'stack', stat = 'identity') +
+  scale_fill_viridis_d(option = "magma") +
+  theme_minimal() +
+  labs(
+    title = "Changes in Irrigation Methods over Time",
+    y = "Percentage of Total Irrigated Area (%)",
+    x = "Year",
+    color = "Irrigation Type"
+  ) +
+  theme(
+    legend.position = "bottom",
+    strip.background = element_rect(color = "black"),
+    strip.text = element_text(face = "bold")
+  )
+#################################################################
+
 # Create a stacked area chart to show composition changes over time
 statewide_composition <- statewide_trends %>%
   pivot_wider(
@@ -429,6 +449,10 @@ efficiency_by_method <- irrigation_efficiency %>%
     )
   ) %>%
   filter(!is.na(Percentage) & !is.na(Water_Use_Per_Acre) & Percentage > 0)
+##########################################################################
+
+# create an actual model 
+
 
 # Create a scatter plot showing the relationship between irrigation method and water efficiency
 ggplot(efficiency_by_method, 
@@ -681,3 +705,12 @@ ggplot(water_time, aes(x = Year, y = Total_Water_Use, color = `County Name`)) +
        y = "Total Water Use (Mgal/d)",
        x = "Year") +
   theme(legend.position = "bottom")
+
+
+##############################
+# not ai generated code here
+##############################
+cor(efficiency_by_method)
+
+
+
