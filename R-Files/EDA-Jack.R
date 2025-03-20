@@ -19,9 +19,6 @@ water_withdrawals <- USGS %>%
     contains("total self-supplied withdrawals")) %>%
   select(!contains("saline")) %>%
   select(!contains("deliveries")) 
-
-totals <- USGS %>%
-  filter(Year >= 2000) 
   
 
 #Population Table 
@@ -144,8 +141,6 @@ plot1 <- ggplot(data= Population, aes(x= Year, y= Total_Population )) +
   labs(title = "Total Population Over Time", x = "Year", y = "Total Population") 
 
 plot1
-
-
 
 
 
