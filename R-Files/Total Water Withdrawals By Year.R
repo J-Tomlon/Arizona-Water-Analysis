@@ -50,9 +50,9 @@ total_usage_plot <- ggplot(yearly_totals, aes(x = Year, y = Total)) +
   geom_line(color = "blue", size = 1) +
   geom_point(color = "darkblue", size = 3) +
   labs(
-    title = "Total Water Usage by Year",
+    title = "Total Arizona Water withdrawals by Year (Mgal/d)",
     x = "Year",
-    y = "Total Water Usage",
+    y = "Total Withdrawals",
     caption = "Source: Water Usage Dataset"
   ) +
   theme_minimal() +
