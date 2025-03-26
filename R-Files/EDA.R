@@ -10,7 +10,7 @@ library(tigris)
 ###### lots of code generated from claude.ai
 
 # loading in the USGS data 
-water_data <- read.csv("USGS Water Use Data for All of Arizona.csv")
+water_data <- read.csv("USGS Water Use Data for All of Arizona.csv", check.names = FALSE)
 
 #################################################################
 # initial attempt at reformatting from 300ish columns to a long format 
@@ -280,8 +280,11 @@ high_water_use <- water_efficiency %>%
   slice_head(n = 5) %>%
   ungroup()
 
+# read in just irrigation data 
+irrigation <- read.csv("AZ Irrigation Data.csv", check.names = FALSE)
+
 # Look at efficiency of irrigation (since it's typically the largest user in AZ)
-irrigation_efficiency <- water_data %>%
+irrigation_efficiency <- irrigation %>%
   select(
     `County Name`, `Year`,
     `Irrigation, Total total self-supplied withdrawals, fresh, in Mgal/d`,
@@ -300,6 +303,29 @@ irrigation_efficiency <- water_data %>%
       `Irrigation, Total total irrigation, in thousand acres` * 100,
     Surface_Pct = `Irrigation, Total surface irrigation, in thousand acres` / 
       `Irrigation, Total total irrigation, in thousand acres` * 100, 
+    Total = Microirrigation_Pct + Sprinkler_Pct + Surface_Pct
+  )
+
+# without commas bc my r is geeked
+irrigation_efficiency <- irrigation %>%
+  select(
+    `County Name`, `Year`,
+    `Irrigation Total total self supplied withdrawals fresh in Mgal d`,
+    `Irrigation Total total irrigation in thousand acres`,
+    contains("microirrigation") & contains("thousand acres"),
+    contains("sprinkler irrigation") & contains("thousand acres"),
+    contains("surface irrigation") & contains("thousand acres")
+  ) %>%
+  mutate(across(-c(`County Name`, `Year`), ~as.numeric(.x))) %>%
+  mutate(
+    Water_Use_Per_Acre = `Irrigation Total total self supplied withdrawals fresh in Mgal d` / 
+      `Irrigation Total total irrigation in thousand acres`,
+    Microirrigation_Pct = `Irrigation Total microirrigation in thousand acres` / 
+      `Irrigation Total total irrigation in thousand acres` * 100,
+    Sprinkler_Pct = `Irrigation Total sprinkler irrigation in thousand acres` / 
+      `Irrigation Total total irrigation in thousand acres` * 100,
+    Surface_Pct = `Irrigation Total surface irrigation in thousand acres` / 
+      `Irrigation Total total irrigation in thousand acres` * 100, 
     Total = Microirrigation_Pct + Sprinkler_Pct + Surface_Pct
   )
 
@@ -451,14 +477,82 @@ efficiency_by_method <- irrigation_efficiency %>%
   filter(!is.na(Percentage) & !is.na(Water_Use_Per_Acre) & Percentage > 0)
 ##########################################################################
 
-# create an actual model 
+# create an actual model duh don't be lazy  
+
+# Create separate linear models for each irrigation type
+models <- list()
+summary_stats <- data.frame()
+
+# Split data by irrigation type and build models
+for(type in unique(efficiency_original$Irrigation_Type)) {
+  # Subset data for this irrigation type
+  subset_data <- efficiency_original[efficiency_original$Irrigation_Type == type, ]
+  
+  # Create linear model
+  model <- lm(Water_Use_Per_Acre ~ Percentage, data = subset_data)
+  
+  # Store model
+  models[[type]] <- model
+  
+  # Extract model statistics
+  model_summary <- summary(model)
+  
+  # Create a row of summary statistics
+  stats_row <- data.frame(
+    Irrigation_Type = type,
+    Slope = coef(model)[2],
+    Intercept = coef(model)[1],
+    R_squared = model_summary$r.squared,
+    P_value = model_summary$coefficients[2,4],
+    stringsAsFactors = FALSE
+  )
+  
+  # Add to summary stats
+  summary_stats <- rbind(summary_stats, stats_row)
+}
+
+# View summary statistics
+print(summary_stats)
+
+##### significane of models 
+### no outliers removed 
+
+#               Irrigation_Type        Slope Intercept   R_squared      P_value
+# Percentage          Surface  0.006409697  3.735021 0.009619031 3.243293e-01
+# Percentage1       Sprinkler -0.026220404  4.983267 0.196945924 7.460820e-06
+# Percentage2 Microirrigation  0.124250863  4.071714 0.167814735 3.768166e-02
+
+### without z- score outliers:
+
+#             Irrigation_Type        Slope Intercept   R_squared      P_value
+# Percentage          Surface  0.005825068  3.737076 0.008830843 3.474944e-01
+# Percentage1       Sprinkler -0.025502160  4.920916 0.207735917 4.413175e-06
+# Percentage2 Microirrigation  0.124250863  4.071714 0.167814735 3.768166e-02
+#### seems to be the best option for trimming
+
+### without IQR outliers: 
+
+#             Irrigation_Type        Slope Intercept   R_squared    P_value
+# Percentage          Surface  0.005247692  3.850433 0.008013701 0.37576952
+# Percentage1       Sprinkler -0.015835778  4.784223 0.085044654 0.00529022
+# Percentage2 Microirrigation  0.124250863  4.071714 0.167814735 0.03768166
+
+### without cook's distance outliers
+
+#             Irrigation_Type       Slope Intercept R_squared      P_value
+# Percentage          Surface  0.01091222  3.440594 0.0379475 0.0558688057
+# Percentage1       Sprinkler -0.01932444  4.856899 0.1194223 0.0008499524
+# Percentage2 Microirrigation  0.12297707  4.178412 0.2106169 0.0210220069
 
 
-# Create a scatter plot showing the relationship between irrigation method and water efficiency
-ggplot(efficiency_by_method, 
+# Create the same plot but use the models to add regression lines
+ggplot(efficiency_cleaned, 
        aes(x = Percentage, y = Water_Use_Per_Acre, color = Irrigation_Type)) +
   geom_point(alpha = 0.7, size = 3) +
-  geom_smooth(method = "lm", se = FALSE, linewidth = 1, alpha = 0.7) +
+  # Instead of geom_smooth, use the model coefficients directly
+  geom_abline(data = summary_stats,
+              aes(slope = Slope, intercept = Intercept, color = Irrigation_Type),
+              linewidth = 1, alpha = 0.7) +
   scale_color_viridis_d(option = "plasma") +
   facet_wrap(~ Irrigation_Type, scales = "free_x") +
   theme_minimal() +
@@ -470,6 +564,43 @@ ggplot(efficiency_by_method,
     color = "Irrigation Type"
   ) +
   theme(legend.position = "none")
+
+## now looking to remove outliers
+# For your irrigation data, you can check specific variables
+# Example for Water_Use_Per_Acre
+
+# Method 1: Z-score
+z_scores <- scale(efficiency_by_method$Water_Use_Per_Acre)
+outliers_z <- which(abs(z_scores) > 3)  # Points more than 3 standard deviations away
+
+# Method 2: IQR method
+Q1 <- quantile(efficiency_by_method$Water_Use_Per_Acre, 0.25, na.rm = TRUE)
+Q3 <- quantile(efficiency_by_method$Water_Use_Per_Acre, 0.75, na.rm = TRUE)
+IQR <- Q3 - Q1
+lower_bound <- Q1 - 1.5 * IQR
+upper_bound <- Q3 + 1.5 * IQR
+outliers_iqr <- which(efficiency_by_method$Water_Use_Per_Acre < lower_bound | 
+                        efficiency_by_method$Water_Use_Per_Acre > upper_bound)
+
+# Method 3: Cook's distance for regression models
+model <- lm(Water_Use_Per_Acre ~ Percentage, data = efficiency_by_method)
+cooks_d <- cooks.distance(model)
+influential <- which(cooks_d > 4/nrow(efficiency_by_method))  # Rule of thumb threshold
+
+# Examine the potential outliers
+efficiency_by_method[outliers_z, ]  # Z-score outliers
+efficiency_by_method[outliers_iqr, ]  # IQR outliers
+efficiency_by_method[influential, ]  # Influential points
+
+# After confirming genuine outliers, you can remove them
+# First create a backup of your original data
+efficiency_original <- efficiency_by_method
+
+# Remove outliers (using whichever method you determined was appropriate)
+efficiency_cleaned <- efficiency_by_method[-outliers_z, ]
+
+
+
 
 
 
