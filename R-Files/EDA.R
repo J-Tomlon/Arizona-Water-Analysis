@@ -12,6 +12,8 @@ library(tigris)
 # loading in the USGS data 
 water_data <- read.csv("USGS Water Use Data for All of Arizona.csv", check.names = FALSE)
 
+water_data %>% 
+
 #################################################################
 # initial attempt at reformatting from 300ish columns to a long format 
 #################################################################
@@ -102,6 +104,8 @@ reclaimed_water <- water_data %>% select(c("County Name", "Year",
                                            "Irrigation, Golf Courses reclaimed wastewater for golf courses, in Mgal/d",                    
                                            "Wastewater Treatment reclaimed wastewater released by wastewater facilities, in Mgal/d"))
 
+
+reclaimed_water <- as.numeric(reclaimed_water[, -1:2])
 # Reshape the data for time series analysis
 reclaimed_long <- reclaimed_water %>%
   # Get total reclaimed water usage across sectors
@@ -597,7 +601,10 @@ efficiency_by_method[influential, ]  # Influential points
 efficiency_original <- efficiency_by_method
 
 # Remove outliers (using whichever method you determined was appropriate)
-efficiency_cleaned <- efficiency_by_method[-outliers_z, ]
+efficiency_cleaned_z <- efficiency_by_method[-outliers_z, ]
+efficiency_cleaned_iqr <- efficiency_by_method[-outliers_iqr, ]
+efficiency_cleaned_cooks <- efficiency_by_method[-influential, ]
+
 
 
 
