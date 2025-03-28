@@ -47,20 +47,24 @@ yearly_totals$Total <- rowSums(yearly_totals[, 2:9], na.rm = TRUE)
 
 
 total_usage_plot <- ggplot(yearly_totals, aes(x = Year, y = Total)) +
-  geom_line(color = "blue", size = 1) +
-  geom_point(color = "darkblue", size = 3) +
+  geom_line(color = "navy", size = 1.2) +  # Professional blue
+  geom_point(color = "gold", size = 3, alpha = 0.8) +  # Contrasting red points
   labs(
-    title = "Total Arizona Water withdrawals by Year (Mgal/d)",
+    title = "Total Arizona Water Withdrawals by Year",
+    subtitle = "(Million Gallons per Day)",
     x = "Year",
-    y = "Total Withdrawals",
-    caption = "Source: Water Usage Dataset"
-  ) +
-  theme_minimal() +
+    y = "Total Withdrawals (Mgal/d)",
+    caption = "Source: USGS Water Usage Dataset"
+  ) + 
+  theme_minimal(base_size = 14) +  # Slightly larger base text
   theme(
-    plot.title = element_text(face = "bold", size = 16),
+    plot.title = element_text(face = "bold", size = 18, hjust = 0.5),  # Centered title
+    plot.subtitle = element_text(size = 14, hjust = 0.5, color = "gray40"),  
     axis.title = element_text(face = "bold"),
-    panel.grid.major = element_line(color = "gray90"),
-    panel.grid.minor = element_line(color = "gray95")
+    axis.text = element_text(color = "black"),
+    panel.grid.major = element_line(color = "gray85"),
+    panel.grid.minor = element_blank(),  # Remove minor grid lines for clarity
+    plot.caption = element_text(size = 10, hjust = 1, color = "gray50")  # Align caption right
   )
 
 total_usage_plot
