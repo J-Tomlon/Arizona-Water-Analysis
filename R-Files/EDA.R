@@ -105,7 +105,8 @@ reclaimed_water <- water_data %>% select(c("County Name", "Year",
                                            "Wastewater Treatment reclaimed wastewater released by wastewater facilities, in Mgal/d"))
 
 
-reclaimed_water <- as.numeric(reclaimed_water[, -1:2])
+reclaimed_water <- reclaimed_water %>% 
+
 # Reshape the data for time series analysis
 reclaimed_long <- reclaimed_water %>%
   # Get total reclaimed water usage across sectors
@@ -700,6 +701,7 @@ water_metrics <- water_data %>%
     Irrigation = `Irrigation, Total total self-supplied withdrawals, fresh, in Mgal/d`,
     Public_Supply = `Public Supply total self-supplied withdrawals, total, in Mgal/d`,
     Mining = `Mining total self-supplied withdrawals, in Mgal/d`,
+    Industrial = `Industrial total self-supplied withdrawals, in Mgal/d`,
     
     # Per capita and water source metrics
     Population = `Total Population total population of area, in thousands`,
@@ -710,6 +712,7 @@ water_metrics <- water_data %>%
   select(`County Name`, Population, Total_Water_Use, Total_Per_Capita, 
          Irrigation, Public_Supply, Mining, Groundwater_Pct) %>%
   mutate(`County Name` = str_replace(`County Name`, " COUNTY", ""))
+
 
 # Join with shapefile (ensure county names match)
 az_counties$NAME <- toupper(az_counties$NAME)
@@ -725,46 +728,6 @@ library(sf)
 library(viridis)
 library(tigris)
 
-# Read water data and convert columns
-water_data <- read_csv("USGS Water Use Data for All of Arizona.csv") %>%
-  mutate(across(-c(`State Code`, `County Code`, `Year`), as.character),
-         across(-c(`State Name`, `County Name`), as.numeric))
-
-# Get Arizona county shapefile
-az_counties <- counties(state = "AZ", cb = TRUE)
-
-# Prepare most recent water data with key metrics
-latest_year <- max(water_data$Year, na.rm = TRUE)
-water_metrics <- water_data %>%
-  filter(Year == latest_year) %>%
-  mutate(
-    # Total water use
-    Total_Water_Use = rowSums(across(c(
-      `Public Supply total self-supplied withdrawals, total, in Mgal/d`,
-      `Irrigation, Total total self-supplied withdrawals, fresh, in Mgal/d`,
-      `Mining total self-supplied withdrawals, in Mgal/d`,
-      `Industrial total self-supplied withdrawals, in Mgal/d`
-    )), na.rm = TRUE),
-    
-    # Key sectors
-    Irrigation = `Irrigation, Total total self-supplied withdrawals, fresh, in Mgal/d`,
-    Public_Supply = `Public Supply total self-supplied withdrawals, total, in Mgal/d`,
-    Mining = `Mining total self-supplied withdrawals, in Mgal/d`,
-    
-    # Per capita and water source metrics
-    Population = `Total Population total population of area, in thousands`,
-    Total_Per_Capita = Total_Water_Use / Population,
-    Groundwater_Pct = `Public Supply self-supplied groundwater withdrawals, fresh, in Mgal/d` / 
-      `Public Supply total self-supplied withdrawals, total, in Mgal/d` * 100
-  ) %>%
-  select(`County Name`, Population, Total_Water_Use, Total_Per_Capita, 
-         Irrigation, Public_Supply, Mining, Groundwater_Pct) %>%
-  mutate(`County Name` = str_replace(`County Name`, " COUNTY", ""))
-
-# Join with shapefile (ensure county names match)
-az_counties$NAME <- toupper(az_counties$NAME)
-az_water_map <- az_counties %>%
-  left_join(water_metrics, by = c("NAME" = "County Name"))
 
 # Example 1: Total Water Use Map
 ggplot(data = az_water_map) +
@@ -784,14 +747,46 @@ ggplot(data = az_water_map) +
        subtitle = paste("Data from USGS,", latest_year)) +
   theme(legend.position = "right")
 
+
+# add together public and comestic per capita columns 
+
+# creating total use per capita column using given per capita columns 
+water_per_capita <- water_data %>% filter(Year == latest_year) %>% select(c(contains("gallons/person/day"), `County Name`))
+
+water_per_capita <- water_per_capita %>% 
+  mutate( Total_Per_Capita = rowSums(water_per_capita[ , -which(names(water_per_capita) == "County Name")]))
+
+az_water_map_per_capita <- az_counties %>%
+  left_join(water_per_capita, by = c("NAMELSAD" = "County Name"))
+
+
+
 # Example 3: Water Use Per Capita
-ggplot(data = az_water_map) +
+ggplot(data = az_water_map_per_capita) +
   geom_sf(aes(fill = Total_Per_Capita)) +
-  scale_fill_viridis_c(option = "plasma", name = "Water Use Per Capita\n(Mgal/d per 1000 people)") +
+  # Add county names
+  geom_sf_text(aes(label = NAME), size = 3, fontface = "bold", check_overlap = TRUE, color = "black") +
+  scale_fill_viridis_c(option = "viridis", name = "Water Use Per Capita\n(Mgal/d per 1000 people)") +
+  
   theme_minimal() +
   labs(title = "Water Use Per Capita by Arizona County",
-       subtitle = paste("Data from USGS,", latest_year)) +
-  theme(legend.position = "right")
+       subtitle = paste("Data from", latest_year), 
+       caption = "Source: USGS Water Use Dataset") +
+  # Remove lat/long axes
+  theme(
+    plot.title = element_text(face = "bold", size = 18, hjust = 0.5), 
+    plot.subtitle = element_text(size = 14, hjust = 0.5, color = "gray40"),
+    legend.position = "right",
+    axis.text = element_blank(),
+    axis.ticks = element_blank(),
+    axis.title = element_blank(), 
+    plot.caption = element_text(size = 10, hjust = 1, color = "gray50")
+  )
+
+
+scale_fill_gradient2(low = "#5605B0", high = "#C21B00", name = "Water Use Per Capita\n(Mgal/d per 1000 people)") +
+  
+
 
 # Example 4: Groundwater Percentage
 ggplot(data = az_water_map) +
@@ -837,7 +832,7 @@ water_time <- water_data %>%
 # County-level water use trends over time
 ggplot(water_time, aes(x = Year, y = Total_Water_Use, color = `County Name`)) +
   geom_line(linewidth = 1) +
-  scale_color_viridis_d() +
+  scale_color_brewer(palette = "Set3") +
   theme_minimal() +
   labs(title = "Water Use Trends by County",
        y = "Total Water Use (Mgal/d)",
