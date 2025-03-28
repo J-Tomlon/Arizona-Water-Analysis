@@ -15,7 +15,7 @@ USGS <- USGS %>%
 
 water.use <- USGS %>%
   select(`State Code`, `State Name`, `County Code`, `County Name`, `Year`,
-    contains("use"), 
+    contains("per capita"), 
     -contains("saline")
   )
 
