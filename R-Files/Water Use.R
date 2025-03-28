@@ -14,10 +14,9 @@ USGS <- USGS %>%
 
 
 water.use <- USGS %>%
-  select(
+  select(`State Code`, `State Name`, `County Code`, `County Name`, `Year`,
     contains("use"), 
     -contains("saline")
-    
   )
 
 public.use <- USGS %>%
@@ -27,4 +26,4 @@ public.use <- USGS %>%
   )
 
 
-model <- lm("Public Supply per capita use, in gallon/person/day" ~ "County Name")
+
