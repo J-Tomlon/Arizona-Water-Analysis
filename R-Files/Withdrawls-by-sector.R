@@ -70,11 +70,19 @@ ggplot(long_data, aes(x = Year, y = Withdrawal, color = Sector, group = Sector))
   geom_point(size = 2) +
   labs(title = "Trends in Water Withdrawals by Sector",
        x = "Year",
-       y = "Withdrawal (Units)",
+       y = "Withdrawal (Mgal/d)",
        color = "Sector") +
   theme_minimal() +
   scale_x_continuous(breaks = unique(long_data$Year)) +
-  theme(legend.position = "right")
+  theme(
+    plot.title = element_text(face = "bold", size = 18, hjust = 0.5),  # Centered title
+    plot.subtitle = element_text(size = 14, hjust = 0.5, color = "gray40"),  
+    axis.title = element_text(face = "bold"),
+    axis.text = element_text(color = "black"),
+    panel.grid.major = element_line(color = "gray85"),
+    panel.grid.minor = element_blank(),  # Remove minor grid lines for clarity
+    plot.caption = element_text(size = 10, hjust = 1, color = "gray50")  # Align caption right
+  )
 
 ggsave("withdrawal_trends_by_sector.png", width = 10, height = 6)
 
