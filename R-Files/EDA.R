@@ -308,7 +308,8 @@ irrigation_efficiency <- irrigation %>%
       `Irrigation, Total total irrigation, in thousand acres` * 100,
     Surface_Pct = `Irrigation, Total surface irrigation, in thousand acres` / 
       `Irrigation, Total total irrigation, in thousand acres` * 100, 
-    Total = Microirrigation_Pct + Sprinkler_Pct + Surface_Pct
+    Total = Microirrigation_Pct + Sprinkler_Pct + Surface_Pct,
+    
   )
 
 # without commas bc my r is geeked
@@ -418,14 +419,20 @@ ggplot(irrigation_long,
   theme_minimal() +
   labs(
     title = "Changes in Irrigation Methods over Time",
+    caption = "Source: USGS Water Use Dataset",
     y = "Percentage of Total Irrigated Area (%)",
     x = "Year",
-    color = "Irrigation Type"
+    fill = "Irrigation Type"
   ) +
   theme(
     legend.position = "bottom",
     strip.background = element_rect(color = "black"),
-    strip.text = element_text(face = "bold")
+    strip.text.y = element_text(face = "bold"),
+    axis.text.y = element_blank(),
+    axis.ticks.y = element_blank(),
+    plot.title = element_text(face = "bold", size = 18, hjust = 0.5), 
+    plot.caption = element_text(size = 10, hjust = 1, color = "gray50"), 
+    
   )
 #################################################################
 
@@ -489,9 +496,9 @@ models <- list()
 summary_stats <- data.frame()
 
 # Split data by irrigation type and build models
-for(type in unique(efficiency_original$Irrigation_Type)) {
+for(type in unique(eff_2015$Irrigation_Type)) {
   # Subset data for this irrigation type
-  subset_data <- efficiency_original[efficiency_original$Irrigation_Type == type, ]
+  subset_data <- eff_2015[eff_2015$Irrigation_Type == type, ]
   
   # Create linear model
   model <- lm(Water_Use_Per_Acre ~ Percentage, data = subset_data)
@@ -551,29 +558,130 @@ print(summary_stats)
 
 
 # Create the same plot but use the models to add regression lines
-ggplot(efficiency_cleaned, 
+
+eff_2015 <- efficiency_by_method %>% filter(Year ==2000)
+
+ggplot(efficiency_by_method, 
        aes(x = Percentage, y = Water_Use_Per_Acre, color = Irrigation_Type)) +
   geom_point(alpha = 0.7, size = 3) +
   # Instead of geom_smooth, use the model coefficients directly
   geom_abline(data = summary_stats,
               aes(slope = Slope, intercept = Intercept, color = Irrigation_Type),
               linewidth = 1, alpha = 0.7) +
-  scale_color_viridis_d(option = "plasma") +
+  scale_color_viridis_d(option = "viridis") +
+  facet_wrap(~ Irrigation_Type) +
+  theme_minimal() +
+  labs(
+    title = "Relationship Between Irrigation Method and Water Use Efficiency",
+    subtitle = "Higher water use per acre indicates lower efficiency",
+    caption = "Source: USGS Water Use Dataset",
+    y = "Water Use Per Acre (Mgal/d per thousand acres)",
+    x = "Percentage of Irrigation Type (%)",
+    color = "Irrigation Type"
+  ) +
+  theme(
+    legend.position = "none", 
+    strip.background = element_rect(color = "black"),
+    strip.text.y = element_text(face = "bold"),
+    plot.title = element_text(face = "bold", size = 18, hjust = 0.5), 
+    plot.caption = element_text(size = 10, hjust = 1, color = "gray50"),
+    plot.subtitle = element_text(size = 14, hjust = 0.5, color = "gray40"),
+  )
+
+#### better plot from claude
+irrigation_types <- unique(efficiency_by_method$Irrigation_Type)
+viridis_colors <- viridis::viridis(length(irrigation_types), option = "viridis")
+names(viridis_colors) <- irrigation_types
+
+
+ggplot(efficiency_by_method, 
+       aes(x = Percentage, y = Water_Use_Per_Acre, color = Irrigation_Type)) +
+  geom_point(alpha = 0.7, size = 3) +
+  # Instead of geom_smooth, use the model coefficients directly
+  geom_abline(data = summary_stats,
+              aes(slope = Slope, intercept = Intercept, color = Irrigation_Type),
+              linewidth = 1, alpha = 0.7) +
+  scale_color_viridis_d(option = "viridis") +
+  # Modify the facet_wrap to use a labeller function
+  facet_wrap(~ Irrigation_Type, scales = "free_x", 
+             labeller = labeller(Irrigation_Type = c(
+               "drip" = "Drip Irrigation",
+               "flood" = "Flood Irrigation",
+               "sprinkler" = "Sprinkler Systems"
+             ))) +
+  theme_minimal() +
+  labs(
+    title = "Relationship Between Irrigation Method and Water Efficiency",
+    subtitle = "Higher water use per acre indicates lower efficiency",
+    caption = "Source: USGS Water Use Dataset",
+    y = "Water Use Per Acre (Mgal/d per thousand acres)",
+    x = "Percentage of Irrigation Type (%)",
+    color = "Irrigation Type"
+  ) +
+  theme(
+    legend.position = "none", 
+    strip.background = element_rect(color = NA),
+    strip.text = element_text(face = "bold", size = 12),
+    plot.title = element_text(face = "bold", size = 18, hjust = 0.5), 
+    plot.caption = element_text(size = 10, hjust = 1, color = "gray50"),
+    plot.subtitle = element_text(size = 14, hjust = 0.5, color = "gray40"),
+  )+
+  # This is the key part - apply custom backgrounds to each facet
+  theme(strip.background.x = element_rect(
+    color = rep(viridis_colors, each = 1),
+    fill = NA))
+
+
+
+# First, check your actual Irrigation_Type levels
+actual_types <- unique(efficiency_by_method$Irrigation_Type)
+print(actual_types)
+
+# Define custom colors based on your ACTUAL irrigation types
+# Adjust these names to match exactly what's in your data
+custom_colors <- c(
+  "Microirrigation" = "#440154",      # Dark purple 
+  "Surface" = "#21908C",     # Teal
+  "Sprinkler" = "#FDE725"  # Yellow
+)
+# Make sure the names exactly match your data levels!
+
+# Create the plot with manual strip colors
+p <- ggplot(efficiency_by_method, 
+            aes(x = Percentage, y = Water_Use_Per_Acre, color = Irrigation_Type)) +
+  geom_point(alpha = 0.7, size = 3) +
+  geom_abline(data = summary_stats,
+              aes(slope = Slope, intercept = Intercept, color = Irrigation_Type),
+              linewidth = 1, alpha = 0.7) +
+  scale_color_manual(values = custom_colors) +
   facet_wrap(~ Irrigation_Type, scales = "free_x") +
   theme_minimal() +
   labs(
     title = "Relationship Between Irrigation Method and Water Efficiency",
     subtitle = "Higher water use per acre indicates lower efficiency",
+    caption = "Source: USGS Water Use Dataset",
     y = "Water Use Per Acre (Mgal/d per thousand acres)",
     x = "Percentage of Irrigation Type (%)",
     color = "Irrigation Type"
   ) +
-  theme(legend.position = "none")
+  theme(
+    legend.position = "none",
+    plot.title = element_text(face = "bold", size = 18, hjust = 0.5), 
+    plot.caption = element_text(size = 10, hjust = 1, color = "gray50"),
+    plot.subtitle = element_text(size = 14, hjust = 0.5, color = "gray40"),
+    strip.text = element_text(face = "bold", size = 12, color = "white")
+  )
+
+# Print the plot
+print(p)
+
+
+
 
 ## now looking to remove outliers
 # For your irrigation data, you can check specific variables
 # Example for Water_Use_Per_Acre
-
+efficiency_by_method <- eff_2015
 # Method 1: Z-score
 z_scores <- scale(efficiency_by_method$Water_Use_Per_Acre)
 outliers_z <- which(abs(z_scores) > 3)  # Points more than 3 standard deviations away
@@ -727,7 +835,7 @@ library(tidyverse)
 library(sf)
 library(viridis)
 library(tigris)
-
+library(dplyr)
 
 # Example 1: Total Water Use Map
 ggplot(data = az_water_map) +
@@ -748,25 +856,69 @@ ggplot(data = az_water_map) +
   theme(legend.position = "right")
 
 
-# add together public and comestic per capita columns 
-
-# creating total use per capita column using given per capita columns 
-water_per_capita <- water_data %>% filter(Year == latest_year) %>% select(c(contains("gallons/person/day"), `County Name`))
-
-water_per_capita <- water_per_capita %>% 
-  mutate( Total_Per_Capita = rowSums(water_per_capita[ , -which(names(water_per_capita) == "County Name")]))
+# Fix the error in your Total_Per_Capita calculation
+water_per_capita <- water_data %>% filter(Year == latest_year) %>% 
+  select(c(contains("gallons/person/day"), `County Name`))
 
 az_water_map_per_capita <- az_counties %>%
-  left_join(water_per_capita, by = c("NAMELSAD" = "County Name"))
+  left_join(water_per_capita, by = c("NAMELSAD" = "County Name")) %>%
+  mutate(`County Name` = NAMELSAD, 
+         Public_supply_use = `Public Supply per capita use, in gallons/person/day`, 
+         Domestic_public_supply_use = `Domestic per capita use, public-supplied, in gallons/person/day`, 
+         Domestic_self_supply_use = `Domestic per capita use, self-supplied, in gallons/person/day`,
+         Domestic_difference = abs(Domestic_public_supply_use - Domestic_self_supply_use))
 
+# Create a function to generate one map
+create_water_map <- function(data, value_col, title_suffix) {
+  ggplot(data = data) +
+    geom_sf(aes(fill = .data[[value_col]])) +
+    # Add county names - making them smaller for side-by-side plots
+    geom_sf_text(aes(label = NAME), size = 2.5, fontface = "bold", check_overlap = TRUE, color = "black") +
+    scale_fill_gradient(low = "#AF77F0", high = "#EA3D33", 
+                        name = paste0(title_suffix, "\n(Gallons/Person/Day)")) +
+    theme_minimal() +
+    labs(title = paste0(title_suffix, " by County")) +
+    # Remove lat/long axes
+    theme(
+      plot.title = element_text(face = "bold", size = 12, hjust = 0.5), 
+      legend.position = "bottom",
+      legend.key.size = unit(0.5, "cm"),
+      legend.title = element_text(size = 8),
+      legend.text = element_text(size = 7),
+      axis.text = element_blank(),
+      axis.ticks = element_blank(),
+      axis.title = element_blank()
+    )
+}
 
+# Create the three individual plots
+plot1 <- create_water_map(az_water_map_per_capita, "Public_supply_use", "Public Supply Use")
+plot2 <- create_water_map(az_water_map_per_capita, "Domestic_public_supply_use", "Domestic Public Supply Use")
+plot3 <- create_water_map(az_water_map_per_capita, "Domestic_self_supply_use", "Domestic Self Supply Use")
+
+# Arrange them side-by-side using patchwork
+library(patchwork)
+
+combined_plot <- plot1 + plot2 + plot3 + 
+  plot_layout(ncol = 3) +
+  plot_annotation(
+    title = "Water Use Per Capita by Arizona County",
+    caption = "Source: USGS Water Use Dataset",
+    subtitle = paste("Data from", latest_year),
+    theme = theme(
+      plot.title = element_text(face = "bold", size = 16, hjust = 0.5),
+      plot.caption = element_text(size = 10, hjust = 1, color = "gray50"),
+      plot.subtitle = element_text(size = 10, hjust = 0.5, color = "gray40") ))
+
+# Display the combined plot
+combined_plot
 
 # Example 3: Water Use Per Capita
 ggplot(data = az_water_map_per_capita) +
-  geom_sf(aes(fill = Total_Per_Capita)) +
+  geom_sf(aes(fill = Public_supply_use)) +
   # Add county names
   geom_sf_text(aes(label = NAME), size = 3, fontface = "bold", check_overlap = TRUE, color = "black") +
-  scale_fill_viridis_c(option = "viridis", name = "Water Use Per Capita\n(Mgal/d per 1000 people)") +
+  scale_fill_gradient(low = "#AF77F0", high = "#EA3D33", name = "Water Use Per Capita\n(Gallons/Person/Day)") +
   
   theme_minimal() +
   labs(title = "Water Use Per Capita by Arizona County",
@@ -784,7 +936,7 @@ ggplot(data = az_water_map_per_capita) +
   )
 
 
-scale_fill_gradient2(low = "#5605B0", high = "#C21B00", name = "Water Use Per Capita\n(Mgal/d per 1000 people)") +
+#scale_fill_gradient2(low = "#5605B0", high = "#C21B00", name = "Water Use Per Capita\n(Mgal/d per 1000 people)") +
   
 
 
