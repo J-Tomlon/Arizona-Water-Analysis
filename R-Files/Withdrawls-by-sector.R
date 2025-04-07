@@ -115,20 +115,22 @@ Withdrawls.by.sector.blow.up <- ggplot(long_data_filtered, aes(x = Year, y = Wit
   geom_line(linewidth = 1.5,) +
   geom_point(size = 3) +
   labs(
-       x = "Year",
-       y = "Withdrawal (Mgal/d)",
-       color = "Sector") +
+      x = NULL,
+      y = NULL,
+      color = "Sector") +
   theme_minimal() +
   scale_x_continuous(breaks = unique(long_data$Year)) +
   theme(
     plot.title = element_text(face = "bold", size = 18, hjust = 0.5),  
-    plot.subtitle = element_text(size = 14, hjust = 0.5, color = "gray40"),  
     axis.title = element_text(face = "bold"),
     axis.text = element_text(color = "black"),
     panel.grid.major = element_line(color = "gray85"),
-    panel.grid.minor = element_blank(),  
-    plot.caption = element_text(size = 10, hjust = 1, color = "gray50"),
-    legend.position = "none"
+    panel.grid.minor = element_blank(),
+    legend.position = "none", 
+    axis.title.x = element_text(size = 16),
+    axis.title.y = element_text(size = 16),
+    axis.text.x = element_text(size = 14),
+    axis.text.y = element_text(size = 14)
   ) +
   scale_color_manual(values = c("Public.Supply" = "#f29f05",
                                 "Domestic" = '#f25c05',
@@ -141,7 +143,14 @@ Withdrawls.by.sector.blow.up <- ggplot(long_data_filtered, aes(x = Year, y = Wit
                                 
   ))
 
+Withdrawls.by.sector.blow.up
+
 ggsave("withdrawal_trends_by_sector_blow_up.tiff",
+       plot = Withdrawls.by.sector.blow.up, dpi = 600,
+       width = 10, height = 6, 
+       units = "in", compression = "lzw")
+
+ggsave("withdrawal_trends_by_sector_blow_up.jpeg",
        plot = Withdrawls.by.sector.blow.up, dpi = 600,
        width = 10, height = 6, 
        units = "in", compression = "lzw")
