@@ -152,7 +152,6 @@ ggsave("withdrawal_trends_by_sector_blow_up.tiff",
 
 ggsave("withdrawal_trends_by_sector_blow_up.jpeg",
        plot = Withdrawls.by.sector.blow.up, dpi = 600,
-       width = 10, height = 6, 
-       units = "in", compression = "lzw")
+       width = 10, height = 6)
 
 ############################################################################
