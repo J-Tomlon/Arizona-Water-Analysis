@@ -65,25 +65,85 @@ ggplot(long_data, aes(x = factor(Year), y = Withdrawal, fill = Sector)) +
 
 ggsave("withdrawals_by_sector.png", width = 10, height = 6)
 
-ggplot(long_data, aes(x = Year, y = Withdrawal, color = Sector, group = Sector)) +
-  geom_line(linewidth = 1) +
-  geom_point(size = 2) +
-  labs(title = "Trends in Water Withdrawals by Sector",
+
+############
+# Withdrawals per sector 
+############
+
+withdrawals.by.sector <- ggplot(long_data, aes(x = Year, y = Withdrawal, color = Sector, group = Sector)) +
+  geom_line(linewidth = 1.5) +
+  geom_point(size = 3) +
+  labs(title = "Trends in Self-Supplied Water Withdrawals by Sector",
        x = "Year",
        y = "Withdrawal (Mgal/d)",
        color = "Sector") +
   theme_minimal() +
   scale_x_continuous(breaks = unique(long_data$Year)) +
   theme(
-    plot.title = element_text(face = "bold", size = 18, hjust = 0.5),  # Centered title
+    plot.title = element_text(face = "bold", size = 18, hjust = 0.5),  
     plot.subtitle = element_text(size = 14, hjust = 0.5, color = "gray40"),  
     axis.title = element_text(face = "bold"),
     axis.text = element_text(color = "black"),
     panel.grid.major = element_line(color = "gray85"),
-    panel.grid.minor = element_blank(),  # Remove minor grid lines for clarity
-    plot.caption = element_text(size = 10, hjust = 1, color = "gray50")  # Align caption right
-  )
+    panel.grid.minor = element_blank(),  
+    plot.caption = element_text(size = 10, hjust = 1, color = "gray50") 
+  ) +
+  scale_color_manual(values = c("Public.Supply" = "#f29f05",
+                                "Domestic" = '#f25c05',
+                                "Irrigation" = '#001eba',
+                                "Thermoelectric" = '#d6568c',
+                                "Industrial" = '#400d01',
+                                "Mining" = '#a62f03',
+                                "Livestock" = '#31029c',
+                                "Aquaculture" = '#4d8584'
+                                
+  ))
 
-ggsave("withdrawal_trends_by_sector.png", width = 10, height = 6)
+ggsave("withdrawal_trends_by_sector.tiff",
+       plot = withdrawals.by.sector, dpi = 600,
+       width = 10, height = 6, 
+       units = "in", compression = "lzw")
+
+
+############
+# Withdrawals per sector minus Irrigation and Public Supply
+############
+long_data_filtered <- long_data %>%
+  filter(!Sector %in% c("Public.Supply", "Irrigation"))
+
+Withdrawls.by.sector.blow.up <- ggplot(long_data_filtered, aes(x = Year, y = Withdrawal, color = Sector, group = Sector)) +
+  geom_line(linewidth = 1.5,) +
+  geom_point(size = 3) +
+  labs(
+       x = "Year",
+       y = "Withdrawal (Mgal/d)",
+       color = "Sector") +
+  theme_minimal() +
+  scale_x_continuous(breaks = unique(long_data$Year)) +
+  theme(
+    plot.title = element_text(face = "bold", size = 18, hjust = 0.5),  
+    plot.subtitle = element_text(size = 14, hjust = 0.5, color = "gray40"),  
+    axis.title = element_text(face = "bold"),
+    axis.text = element_text(color = "black"),
+    panel.grid.major = element_line(color = "gray85"),
+    panel.grid.minor = element_blank(),  
+    plot.caption = element_text(size = 10, hjust = 1, color = "gray50"),
+    legend.position = "none"
+  ) +
+  scale_color_manual(values = c("Public.Supply" = "#f29f05",
+                                "Domestic" = '#f25c05',
+                                "Irrigation" = '#001eba',
+                                "Thermoelectric" = '#d6568c',
+                                "Industrial" = '#400d01',
+                                "Mining" = '#a62f03',
+                                "Livestock" = '#31029c',
+                                "Aquaculture" = '#4d8584'
+                                
+  ))
+
+ggsave("withdrawal_trends_by_sector_blow_up.tiff",
+       plot = Withdrawls.by.sector.blow.up, dpi = 600,
+       width = 10, height = 6, 
+       units = "in", compression = "lzw")
 
 ############################################################################
