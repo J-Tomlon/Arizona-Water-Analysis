@@ -143,8 +143,51 @@ plot1 <- ggplot(data= Population, aes(x= Year, y= Total_Population )) +
 plot1
 
 
+################################################################################
+# Irrigation Type Table
 
+irrigation.type <- read.csv("./raw-data/AZ Irrigation Data.csv")
 
+irrigation.table <- irrigation.type %>% 
+  select(
+    "County.Name",
+    "Year",
+    "Irrigation..Total.sprinkler.irrigation..in.thousand.acres", 
+    "Irrigation..Total.microirrigation..in.thousand.acres",
+    "Irrigation..Total.surface.irrigation..in.thousand.acres"
+  ) %>%
+  rename("Sprinkler_acres" = "Irrigation..Total.sprinkler.irrigation..in.thousand.acres", 
+        "Microirrigation_acres" = "Irrigation..Total.microirrigation..in.thousand.acres",
+        "Surface_acres" = "Irrigation..Total.surface.irrigation..in.thousand.acres")
+
+arizona_summary <- irrigation.table %>%
+  group_by(Year) %>%
+  summarize(
+    Sprinkler_acres = sum(Sprinkler_acres, na.rm = TRUE),
+    Microirrigation_acres = sum(Microirrigation_acres, na.rm = TRUE),
+    Surface_acres = sum(Surface_acres, na.rm = TRUE)
+  ) %>%
+  mutate(Total_acres_thousands = Sprinkler_acres + Microirrigation_acres + Surface_acres) %>%
+  select(Year, Sprinkler_acres, Microirrigation_acres, Surface_acres, Total_acres_thousands) %>%
+  arrange(Year)
+
+arizona_proportions <- arizona_summary %>%
+  mutate(
+    Sprinkler_proportion = Sprinkler_acres / Total_acres_thousands,
+    Microirrigation_proportion = Microirrigation_acres / Total_acres_thousands,
+    Surface_proportion = Surface_acres / Total_acres_thousands
+  ) %>%
+  select(
+    "Year",
+    "Sprinkler_proportion",
+    "Microirrigation_proportion",
+    "Surface_proportion"
+  ) %>%
+  mutate(
+    Sprinkler_proportion = round(Sprinkler_proportion, 5),
+    Microirrigation_proportion = round(Microirrigation_proportion, 5),
+    Surface_proportion = round(Surface_proportion, 5)
+  ) 
 
 
 
