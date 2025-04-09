@@ -189,6 +189,7 @@ arizona_proportions <- arizona_summary %>%
     Surface_proportion = round(Surface_proportion, 5)
   ) 
 
+write.csv(arizona_proportions, file= "./raw-data/az_irrigation_type_proportion.csv")
 
 
 
