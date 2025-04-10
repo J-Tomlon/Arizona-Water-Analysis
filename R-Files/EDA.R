@@ -489,6 +489,59 @@ efficiency_by_method <- irrigation_efficiency %>%
   filter(!is.na(Percentage) & !is.na(Water_Use_Per_Acre) & Percentage > 0)
 ##########################################################################
 
+efficiency_by_method_filtered <- efficiency_by_method %>% 
+  filter(!(Irrigation_Type == "Microirrigation" &
+              Percentage > 14))
+
+propermodel <- lm(Water_Use_Per_Acre ~ Percentage, data = efficiency_by_method)
+summary(propermodel)
+
+
+justtype <- lm(Water_Use_Per_Acre ~ Irrigation_Type, data = efficiency_by_method)
+summary(justtype)
+
+
+additive <- lm(Water_Use_Per_Acre ~ Irrigation_Type + Percentage, data = efficiency_by_method)
+summary(additive)
+
+
+intercation <- lm(Water_Use_Per_Acre ~ Irrigation_Type * Percentage, data = efficiency_by_method)
+summary(intercation)
+
+
+anova(additive, intercation)
+
+plot(intercation) #36, 85, 86, 34, 27, 34, 92
+
+
+anova <- aov(Water_Use_Per_Acre ~ Irrigation_Type, data = efficiency_by_method_filtered)
+summary(anova)
+propermodel2 <- lm(Water_Use_Per_Acre ~ Percentage, data = efficiency_by_method_filtered)
+summary(propermodel2)
+
+
+justtype2 <- lm(Water_Use_Per_Acre ~ Irrigation_Type, data = efficiency_by_method_filtered)
+summary(justtype2)
+
+
+additive2 <- lm(Water_Use_Per_Acre ~ Irrigation_Type + Percentage, data = efficiency_by_method_filtered)
+summary(additive2)
+
+
+intercation2 <- lm(Water_Use_Per_Acre ~ Irrigation_Type * Percentage, data = efficiency_by_method_filtered)
+summary(intercation2)
+
+
+anova(additive2, intercation2)
+
+plot(intercation2)
+efficiency_by_method_filtered <- efficiency_by_method[-c(36, 85, 86, 34, 27, 34, 92), ]
+
+ggplot(efficiency_by_method, aes(x=Percentage))+
+  geom_boxplot()+
+  facet_wrap(~Irrigation_Type)
+# try to delete micro point- look at leverage of point, remove and try again 
+
 # create an actual model duh don't be lazy  
 
 # Create separate linear models for each irrigation type
@@ -790,7 +843,9 @@ water_trends <- water_data %>%
 ################################
 
 # Get Arizona county shapefile
-az_counties <- counties(state = "AZ", cb = TRUE)
+options(tigris_use_cache = TRUE)  # Cache files to avoid repeated downloads
+
+az_counties <- tigris::counties(state = "AZ", cb = TRUE)
 
 # Prepare most recent water data with key metrics
 latest_year <- max(water_data$Year, na.rm = TRUE)
