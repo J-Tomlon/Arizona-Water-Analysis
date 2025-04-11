@@ -80,6 +80,7 @@ withdrawals.by.sector <- ggplot(long_data, aes(x = Year, y = Withdrawal, color =
        caption = "Figure 2: Self-supplied water withdrawals for each sector in Arizona. Note how Public and Irrigation vastly out weigh other sectors.") +
   theme_minimal() +
   scale_x_continuous(breaks = unique(long_data$Year)) +
+  scale_y_continuous(breaks = seq(0, 5000, by= 1000)) +
   theme(
     plot.title = element_text(face = "bold", size = 18, hjust = 0.5),  
     plot.subtitle = element_text(size = 14, hjust = 0.5, color = "gray40"),  
