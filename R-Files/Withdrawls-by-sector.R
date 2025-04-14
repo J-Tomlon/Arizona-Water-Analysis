@@ -60,10 +60,11 @@ ggplot(long_data, aes(x = factor(Year), y = Withdrawal, fill = Sector)) +
     axis.text = element_text(color = "black"),
     panel.grid.major = element_line(color = "gray85"),
     panel.grid.minor = element_blank(),  
-    plot.caption = element_text(size = 10, hjust = 1, color = "gray50")  
+    plot.caption = element_text(size = 10, hjust = 1, color = "gray50"),
+    legend.position="bottom"
   )
 
-ggsave("withdrawals_by_sector.png", width = 10, height = 6)
+ggsave("withdrawals_by_sector.png", width = 20, height = 12)
 
 
 ############
@@ -88,7 +89,8 @@ withdrawals.by.sector <- ggplot(long_data, aes(x = Year, y = Withdrawal, color =
     axis.text = element_text(color = "black"),
     panel.grid.major = element_line(color = "gray85"),
     panel.grid.minor = element_blank(),  
-    plot.caption = element_text(size = 10, hjust = 1, color = "gray50") 
+    plot.caption = element_text(size = 10, hjust = 1, color = "gray50"),
+    legend.position="bottom"
   ) +
   scale_color_manual(values = c("Public.Supply" = "#f29f05",
                                 "Domestic" = '#f25c05',
@@ -102,10 +104,9 @@ withdrawals.by.sector <- ggplot(long_data, aes(x = Year, y = Withdrawal, color =
   ))
 
 withdrawals.by.sector
-ggsave("withdrawal_trends_by_sector.tiff",
-       plot = withdrawals.by.sector, dpi = 600,
-       width = 10, height = 8, 
-       units = "in", compression = "lzw")
+ggsave("withdrawal_trends_by_sector.jpg",
+       plot = withdrawals.by.sector,
+       width = 20, height = 18)
 
 
 ############
