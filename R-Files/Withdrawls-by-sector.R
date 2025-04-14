@@ -77,20 +77,21 @@ withdrawals.by.sector <- ggplot(long_data, aes(x = Year, y = Withdrawal, color =
   labs(title = "Trends in Self-Supplied Water Withdrawals by Sector",
        x = "Year",
        y = "Withdrawal (Mgal/d)",
-       color = "Sector", 
-       caption = "Figure 2: Self-supplied water withdrawals for each sector in Arizona. Note how Public and Irrigation vastly out weigh other sectors.") +
+       color = "Sector") +
   theme_minimal() +
   scale_x_continuous(breaks = unique(long_data$Year)) +
   scale_y_continuous(breaks = seq(0, 5000, by= 1000)) +
   theme(
-    plot.title = element_text(face = "bold", size = 18, hjust = 0.5),  
-    plot.subtitle = element_text(size = 14, hjust = 0.5, color = "gray40"),  
-    axis.title = element_text(face = "bold"),
+    plot.title = element_text(face = "bold", size = 30, hjust = 0.5),  
+    axis.title = element_text(face = "bold", size = "20"),
     axis.text = element_text(color = "black"),
     panel.grid.major = element_line(color = "gray85"),
     panel.grid.minor = element_blank(),  
     plot.caption = element_text(size = 10, hjust = 1, color = "gray50"),
-    legend.position="bottom"
+    legend.position="bottom", 
+    axis.text.x = element_text(size = 20),
+    axis.text.y = element_text(size = 20), 
+    legend.text = element_text(size = 20)
   ) +
   scale_color_manual(values = c("Public.Supply" = "#f29f05",
                                 "Domestic" = '#f25c05',
@@ -106,7 +107,7 @@ withdrawals.by.sector <- ggplot(long_data, aes(x = Year, y = Withdrawal, color =
 withdrawals.by.sector
 ggsave("withdrawal_trends_by_sector.jpg",
        plot = withdrawals.by.sector,
-       width = 20, height = 18)
+       width = 15, height = 13)
 
 
 ############
