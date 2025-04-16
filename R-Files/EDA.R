@@ -542,6 +542,8 @@ summary(additive2)
 intercation2 <- lm(Water_Use_Per_Acre ~ Irrigation_Type * Percentage, data = efficiency_by_method_filtered)
 summary(intercation2)
 
+annova(additive2, intercation2)
+
 efficiency_by_method_filtered2 <- efficiency_by_method_filtered %>% 
   select( -matches('fit'), -matches('lwr'), -matches('upr')) %>%
   cbind( predict(intercation2, interval='conf') )
